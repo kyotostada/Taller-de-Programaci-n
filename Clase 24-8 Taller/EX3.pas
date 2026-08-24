@@ -19,12 +19,15 @@ type
     elem: pelimax;
     sig: lista;
   end;
-  
+
+  punteros = record
+    pri: lista;
+    ult: lista;
+  end;
   pelimax = record
     puntaje: real;
     code: integer;
-    pri: lista;
-    ult: lista;
+    pun: punteros;
   end;
   Vector = array [rangogeneros] of peli;
   VecMax = array [rangogeneros] of pelimax;
