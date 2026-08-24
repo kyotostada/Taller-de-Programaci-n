@@ -26,10 +26,10 @@ type
     pri: lista;
     ult: lista;
   end;
-  
-  VecGen = array [rangogeneros] of pelimax;
+  Vector = array [rangogeneros] of peli;
+  VecMax = array [rangogeneros] of pelimax;
 
-procedure inicializarVector(var v: VecGen);
+procedure inicializarVector(var v: VecMax);
 var
   i: integer;
 begin
@@ -39,7 +39,8 @@ begin
   end;
 end;
 
-procedure agregarAtras (var pun: lista; p: película);
+procedure cargarLista(var v: vector);
+  procedure agregarAtras (var pun: lista; p: película);
 var
   nue: lista;
 begin
@@ -65,7 +66,6 @@ begin
   end;
 end;
 
-procedure cargarLista(var v: vecgen);
 var
   p: peli;
 begin
@@ -75,38 +75,8 @@ begin
     leerPeli(p);
   end;
 end;
-
-procedure MaxPeli (var maxcode: integer; var maxpun: real; p: real; c: integer);
-begin
-  if (p > maxpun) then begin
-    maxcode:= c;
-    maxpun:= p;
-  end;
-end;
-
-
-
-
-procedure cargarVector (var v: vecgen; l: lista);
-var
-  genactual: rangogeneros;
-  maxcode: integer;
-  maxpun: real;
-begin
-  while (l <> nil) do begin
-    genactual:= l^.elem.gen;
-    maxcode:= -1;
-    maxpun:= -1;
-    while (l <> nil) and (l^.elem.gen = genactual) do begin
-      MaxPeli(maxcode, maxpun, l^.elem.puntaje, l^.elem.code);
-      l:= l^.sig;
-    end;
-    v[genactual].puntaje:= maxpun;
-    v[genactual].code:= maxcode;
-  end;
-end;
     
-procedure OrdenarVector(var v: vecgen);
+procedure OrdenarVector(var v: vecmax);
 var
   i, j, pos: integer;
   item: pelimax;
