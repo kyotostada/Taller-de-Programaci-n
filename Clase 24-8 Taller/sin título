@@ -142,7 +142,7 @@ Begin
          if ((posinferior	>= 1) and (posSuperior <= dimL) then begin
            
            for i:= posSuperior to dimL do
-             v[i-aux]:= v[];
+             v[i-aux]:= v[i];
            dimL:= dimL - aux;
          {Escribir el código correspondiente para hacer el corrimiento y disminuir la dimensión lógica}
          
