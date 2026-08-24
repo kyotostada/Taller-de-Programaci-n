@@ -43,7 +43,7 @@ begin
 end;
 
 procedure cargarLista(var v: vector);
-  procedure agregarAtras (var pun: lista; p: película);
+  procedure agregarAtras (var pun: punteros; p: película);
 var
   nue: lista;
 begin
