@@ -89,16 +89,31 @@ end;
      
 function  BuscarValor (v: vector; dimL, valor: integer): boolean;
 begin
-  if (dimL <> 0) then
-    if v[dimL] = valor then BuscarValor:= true;
-    else begin
+  if (dimL = 0) then
+	BuscarValor := false
+  else if
+	(v[dimL] = valor) then BuscarValor:= true;
+  else
       BuscarValor:= BuscarValor(v, dimL-1, valor)
   {-- Completar --} 
 end; 
 
 procedure ImprimirDigitos (v: vector; dimL: integer);
-begin    
-     {-- Completar --}     
+begin
+     procedure ImprimirDigitosRecursivo (num: integer);
+     begin
+       while (num <> 0) do begin
+         ImprimirDigitosRecursivo(num);
+         writeln (num mod 10);
+         num:= num div 10;
+       end;
+var
+  i: integer;
+begin
+  for i:= 1 to dimL do begin
+    ImprimirDigitosRecursivo(v[i]);
+    
+  end;
 end; 
 
 var dimL, suma, maximo, valor: integer; 
