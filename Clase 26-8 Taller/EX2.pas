@@ -2,6 +2,88 @@ program EX2;
 const
   min = 200;
   max = 230;
+type
+
+  lista = ^nodo;
+  
+  nodo = record
+    elem: integer;
+    sig: lista;
+  end;
+  
+procedure cLista (var l: lista);
+  procedure cargarLista (var l: lista);
+  var
+    aux: integer; 
+    nue: lista;
+  begin
+    aux:= random (max - min) + 1;
+    if (aux <> min) then begin
+      cargarLista(l^.sig);
+      new(nue);
+      nue^.elem:= aux;
+      nue^.sig:= l;
+      l:= nue;
+    end;
+  end;   
+begin
+  l:= nil;
+  cargarLista(l);    
+end;
+
+procedure ImprimirLista (l: lista);
+begin
+  if (l <> nil) then begin
+    ImprimirLista(l^.sig);
+    writeln(l^.elem);
+  end;
+end;
+
+procedure ImprimirInverso (l: lista);
+begin
+  if (l <> nil) then begin
+    writeln(l^.elem);
+    ImprimirInverso(l^.sig);
+  end;
+end;
+    
+function MinimoLista (l: lista): integer;
+begin
+  if (l <> nil) then begin
+    MinimoLista:= MinimoLista(l^.sig);
+    if l^.elem < min then
+      MinimoLista:= l^.elem;
+  end;
+end;
+    
+function BusquedaLista (l: lista; valor: integer): boolean;
+begin
+  if (l = nil) then BusquedaLista:= false
+  else
+    if (l^.elem = valor) then BusquedaLista:= true
+    else
+      BusquedaLista:= BusquedaLista(l^.sig, valor);
+  end;
+  
+      
+var
+  l: lista;
+  valormin: integer;
+  encontre: boolean;
+  valor: integer;
+begin
+  randomize;
+  clista(l);
+  ImprimirLista(l);
+  ImprimirInverso(l);
+  valormin:= MinimoLista(l);
+  read(valor);
+  encontre:= BusquedaLista(l, valor);
+end.
+program EX2;
+const
+  min = 200;
+  max = 230;
   
   
   lista = ^nodo;
