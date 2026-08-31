@@ -109,9 +109,7 @@ begin
   end;
 end;
     
-procedure recorrerLista (l: lista);
-var
-  aux: integer;
+procedure recorrerLista (l: lista, var aux: integer);
 begin
   aux:= 0;
   while (l <> nil) do begin
@@ -122,9 +120,12 @@ begin
 end;
 
 procedure InformarSocios (a: arbol);
+var
+  aux: integer;
 begin
   if (a <> nil) then
-    recorrerLista(a);
+    recorrerLista(a, aux);
+    write('Código de socio:'.
     
 
 var
