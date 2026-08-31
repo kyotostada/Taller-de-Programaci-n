@@ -85,7 +85,7 @@ procedure generarArbol (var a: arbol);
           cargarArbol(a^.hi, p);
         else
           cargarArbol(a^.hd, p);
-      end<
+      end;
   end;
 
 var
@@ -99,6 +99,19 @@ begin
   end;
 end;
   
+function cantMultiplo(a: arbol): integer;
+begin
+  if (a <> nil) then begin
+    if (a^.elem.nro mod 5) = 0) then
+      cantMultiplo:= 1 + cantMultiplo(a);
+    cantMultiplo:= cantMultiplo(a^.hi);
+    cantMultiplo:= cantMultiplo(a^.hd);
+  end;
+end;
+    
+
+
+
 
 var
   a: arbol;
