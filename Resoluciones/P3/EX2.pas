@@ -163,6 +163,9 @@ procedure generarArboles (var AV: arbol1; var AP: arbolProducto; var APV: arbolP
 var
   vl: vental;
 begin
+  a:= nil;
+  av:= nil;
+  apv:= nil;
   lectura(v1, p, v2, vl);
   while (v.cod <> fin) do begin
     cargarArbol1(av, v1)
