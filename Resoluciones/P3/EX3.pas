@@ -91,6 +91,7 @@ procedure generarArbol (var a: arbol);
 var
   p: prestamo;
 begin
+  a:= nil;
   leerPrestamo(p);
   while (p.code <> 0) do begin
     cargarArbol(a, p);
@@ -104,6 +105,7 @@ var
   prom: real;
   valor: integer;
 begin
+  randomize;
   generarArbol(a);
   writeln('La cantidad de socios cuyo número es múltiplo de cinco es:', cantMultiplo(a));
   InformarSocios(a);
