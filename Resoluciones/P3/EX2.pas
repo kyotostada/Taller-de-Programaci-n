@@ -12,7 +12,7 @@ type
   fecha = record
     dia: rangodia;
     mes: rangomes;
-    año: integer;
+    anio: integer;
   end;
 
 // ÁRBOL 1
@@ -80,16 +80,16 @@ begin
   if (v.code <> fin) then
     v1.fec.dia:= random (30) + 1;
     v1.fec.mes:= random(12) + 1;
-    v1.fec.año:= random (2026-2000) + 2000;
+    v1.fec.anio:= random (2026-2000) + 2000;
     v1.cant:= random(1001);
   // Producto Árbol 2
-  p.code:= v.code
-  p.totalVentas:= v.cant;
+  p.code:= v1.code
+  p.totalVentas:= v1.cant;
   // Venta Árbol 3
-  v2.code:= v.code
+  v2.code:= v1.code
   // Venta lista
-  vl.fec:= v.fec;
-  vl.cant:= v.cant;
+  vl.fec:= v1.fec;
+  vl.cant:= v1.cant;
 end;
 
 
