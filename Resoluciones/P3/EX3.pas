@@ -109,9 +109,23 @@ begin
   end;
 end;
     
+procedure recorrerLista (l: lista);
+var
+  aux: integer;
+begin
+  aux:= 0;
+  while (l <> nil) do begin
+    if (l^.elem.cantdias <= 7) then
+      aux:= aux + 1;
+    l:= l^.sig;
+  end;
+end;
 
-
-
+procedure InformarSocios (a: arbol);
+begin
+  if (a <> nil) then
+    recorrerLista(a);
+    
 
 var
   a: arbol;
