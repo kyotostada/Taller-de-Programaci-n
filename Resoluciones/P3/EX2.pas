@@ -229,6 +229,7 @@ var
   CantFecha: integer;
   maxcode, maxven: integer;
 begin
+  randomize;
   generarArboles (arbolV, arbolP, arbolPV);
   writeln('Ingrese una fecha:');
   leerFecha(f);
