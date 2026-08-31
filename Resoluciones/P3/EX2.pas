@@ -76,12 +76,12 @@ type
 procedure generarDatos (var V1: venta; var P: productoM; var v2: venta2; var vl: vental);
 begin
   // Venta Árbol 1
-  v.code:= random(101);
+  v1.code:= random(101);
   if (v.code <> fin) then
-    v.fec.dia:= random (30) + 1;
-    v.fec.mes:= random(12) + 1;
-    v.fec.año:= random (2026-2000) + 2000;
-    v.cant:= random(1001);
+    v1.fec.dia:= random (30) + 1;
+    v1.fec.mes:= random(12) + 1;
+    v1.fec.año:= random (2026-2000) + 2000;
+    v1.cant:= random(1001);
   // Producto Árbol 2
   p.code:= v.code
   p.totalVentas:= v.cant;
@@ -186,14 +186,14 @@ end;
 
 procedure MaxUnidades (AV: arbolProducto; var max, maxcode: integer);
 begin
-  if (a <> nil) do begin
-    if (a^.elem.cant > max) then begin
-      max:= a^.elem.cant
-      maxcode:= a^.elem.code
+  if (av <> nil) do begin
+    if (av^.elem.cant > max) then begin
+      max:= av^.elem.cant
+      maxcode:= av^.elem.code
     end;
     else begin
-      MaxUnidades(a^.hi, max, maxcode)
-      MaxUnidades(a^.hd, max, maxcode);
+      MaxUnidades(av^.hi, max, maxcode)
+      MaxUnidades(av^.hd, max, maxcode);
     end;
   end;
 end;
