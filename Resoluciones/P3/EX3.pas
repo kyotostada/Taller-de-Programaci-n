@@ -124,9 +124,40 @@ var
   aux: integer;
 begin
   if (a <> nil) then
-    recorrerLista(a, aux);
-    write('Código de socio:'.
-    
+    recorrerLista(a^.prestamos, aux);
+    write('Código de socio:', a^.elem.code, 'cantidad de libros cuyo préstamo duró siete o menos días es', aux);
+    InformarSocios(a^.hi);
+    InformarSocios(a^.hd);
+  end;
+end;
+
+
+procedure InformarPromedio (a: arbol; valor: real; var prom: real);    
+
+  
+  
+  procedure cargarPromedio (a: arbol; valor: real; var aux, cantsocios: real);
+  begin
+    if (a <> nil) then
+      if (a^.elem.cantdias > valor) then
+        aux:= aux + a^.elem.cantdias;
+        cantsocios:= cantsocios + 1;
+        writeln('Número de socio:');
+      end;
+      InformarPromedio (a^.hi, valor, prom);
+      InformarPromedio (a^.hd, valor, prom);
+var
+aux: real;
+cantsocios: real;
+begin
+aux:= 0;
+cantsocios:= 0;
+cargarPromedio(a, valor, aux, cantsocios);
+prom:= aux / cantsocios
+end;
+
+
+
 
 var
   a: arbol;
@@ -137,6 +168,9 @@ begin
   generarArbol(a);
   writeln('La cantidad de socios cuyo número es múltiplo de cinco es:', cantMultiplo(a));
   InformarSocios(a);
-  InformarPromedio(a, valor, prom)
+  writeln('Ingrese un valor como promedio');
+  readln(valor);
+  InformarPromedio(a, valor, prom);
+  writeln('El promedio de dias de préstamo de quienes superan el valor promedoi es:', prom);
 end;
 
