@@ -73,7 +73,7 @@ type
     hd: arbolProductoVentas;
   end;
 
-procedure lectura (var V1: venta; var P: productoM; var v2: venta2; var vl: vental);
+procedure generarDatos (var V1: venta; var P: productoM; var v2: venta2; var vl: vental);
 begin
   // Venta Árbol 1
   v.code:= random(101);
@@ -168,7 +168,7 @@ begin
     cargarArbol1(av, v1)
     cargarArbol2(ap, p);
     cargarArbol3(apv, v2);
-    lectura(v1,p,v2,vl);
+    generarDatos(v1,p,v2,vl);
   end;
 end;
 
