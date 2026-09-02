@@ -12,7 +12,6 @@ type
   end;
 
   prestamo = record
-    nro: rangosocio;
     code: rangocodigo;
     fec: fecha;
     cantdias: integer;
@@ -25,11 +24,15 @@ type
     sig: lista;
   end;
 
+  datosocio = record
+    nroSocio: integer;
+    lis: lista;
+  end;
+
   arbol = ^nodoArbol;
 
   nodoArbol = record
-    elem: prestamo;
-    prestamos: lista;
+    elem: datosocio;
     hi: arbol;
     hd: arbol;
   end;
@@ -44,19 +47,18 @@ procedure generarArbol (var a: arbol);
     read(f.anio);
   end;
   
-  procedure leerPrestamo (var p: prestamo);
+  procedure leerPrestamo (var p: prestamo; var nro: integer);
   begin
-    writeln('Ingrese un numero de socio');
-    read(p.nro);
-    if (p.nro <> fin) then begin
-      leerFecha(p.fec);
-      writeln('Ingrese un código de libro');
-      read(p.code);
-      writeln('Ingrese la duración del prestamo:');
-      read(p.cantdias);
+      writeln('Ingrese numero de socio:');
+      read(nro);
+      if (nro <> fin) then begin
+        leerFecha(p.fec);
+        writeln('Ingrese un código de libro');
+        read(p.code);
+        writeln('Ingrese la duración del prestamo:');
+        read(p.cantdias);
+      end;  
     end;
-
-  end;
   
 
   procedure agregarAdelante(var l: lista; p: prestamo);
@@ -69,44 +71,46 @@ procedure generarArbol (var a: arbol);
     l:= nue;
   end;
 
-  procedure cargarArbol(var a: arbol; p: prestamo);
+  procedure cargarArbol(var a: arbol; p: prestamo; nro: integer);
   begin
     if (a = nil) then begin
       new(a);
-      a^.prestamos:= nil;
-      agregarAdelante(a^.prestamos, p);
+      a^.elem.nroSocio:= nro;
+      a^.elem.lis:= nil;
+      agregarAdelante(a^.elem.lis, p);
       a^.hi:= nil;
       a^.hd:= nil;
     end
     else begin
-      if (a^.elem.nro = p.nro) then 
-        agregarAdelante(a^.prestamos, p)
+      if (a^.elem.nroSocio = nro) then 
+        agregarAdelante(a^.elem.lis, p)
       else begin
-        if (a^.elem.nro < p.nro) then
-          cargarArbol(a^.hi, p)
+        if (a^.elem.nroSocio < nro) then
+          cargarArbol(a^.hi, p, nro)
         else
-          cargarArbol(a^.hd, p);
+          cargarArbol(a^.hd, p, nro);
       end;
   end;
 end;
 var
   p: prestamo;
+  nro: integer;
 begin
   a:= nil;
-  leerPrestamo(p);
-  while (p.code <> 0) do begin
-    cargarArbol(a, p);
-    leerPrestamo(p);
+  leerPrestamo(p, nro);
+  while (nro <> fin) do begin
+    cargarArbol(a, p, nro);
+    leerPrestamo(p, nro);
   end;
 end;
   
 function cantMultiplo(a: arbol): integer;
 begin
   if (a <> nil) then begin
-    if ((a^.elem.nro mod 5) = 0) then
-      cantMultiplo:= 1 + cantMultiplo(a);
-    cantMultiplo:= cantMultiplo(a^.hi);
-    cantMultiplo:= cantMultiplo(a^.hd);
+    if ((a^.elem.nroSocio mod 5) = 0) then
+      cantMultiplo:= 1 + cantMultiplo(a^.hi) + cantMultiplo(a^.hd)
+    else
+      cantMultiplo:= cantMultiplo(a^.hi) + cantMultiplo(a^.hd);
   end;
 end;
     
@@ -125,8 +129,8 @@ var
   aux: integer;
 begin
   if (a <> nil) then begin
-    recorrerLista(a^.prestamos, aux);
-    write('Código de socio:', a^.elem.code, 'cantidad de libros cuyo préstamo duró siete o menos días es', aux);
+    recorrerLista(a^.elem.lis, aux);
+    writeln('Código de socio:', a^.elem.nroSocio, 'cantidad de libros cuyo préstamo duró siete o menos días es', aux);
     InformarSocios(a^.hi);
     InformarSocios(a^.hd);
   end;
@@ -135,27 +139,36 @@ end;
 
 procedure InformarPromedio (a: arbol; valor: real; var prom: real);    
 
-  
-  
-  procedure cargarPromedio (a: arbol; valor: real; var aux, cantsocios: real);
+  procedure contarSociosPromedio(l: lista; valor: real; var promediosocio: real);
+  var
+    dias, cantprest: real;
   begin
-    if (a <> nil) then begin
-      if (a^.elem.cantdias > valor) then
-        aux:= aux + a^.elem.cantdias;
-        cantsocios:= cantsocios + 1;
-        writeln('Número de socio:');
-      end;
-      InformarPromedio (a^.hi, valor, prom);
-      InformarPromedio (a^.hd, valor, prom);
+    dias:= 0;
+    cantprest:= 0;
+    while (l <> nil) do begin
+      dias:= dias + 1;
+      cantprest:= cantprest + l^.elem.cantdias;
+      l:=l^.sig;
+    end;
+    promedioSocio:= cantprest / dias;
   end;
-var
-aux: real;
-cantsocios: real;
+  
+  procedure cargarPromedio (a: arbol; valor: real);
+  var
+    promedioSocio: real;
+  begin
+    promedioSocio:= 0;
+    if (a <> nil) then begin
+      contarSociosPromedio(a^.elem.lis, valor, promedioSocio);
+      if (promedioSocio > valor) then
+        writeln('Número de socio:', a^.elem.nroSocio, 'promedio de días de prestamo:', promedioSocio);
+      end;
+      cargarPromedio (a^.hi, valor);
+      cargarPromedio (a^.hd, valor);
+  end;
+
 begin
-aux:= 0;
-cantsocios:= 0;
-cargarPromedio(a, valor, aux, cantsocios);
-prom:= aux / cantsocios
+cargarPromedio(a, valor);
 end;
 
 
@@ -166,12 +179,13 @@ var
   prom: real;
   valor: integer;
 begin
-  randomize;
   generarArbol(a);
+  if (a <> nil) then begin
   writeln('La cantidad de socios cuyo número es múltiplo de cinco es:', cantMultiplo(a));
   InformarSocios(a);
   writeln('Ingrese un valor como promedio');
   readln(valor);
   InformarPromedio(a, valor, prom);
   writeln('El promedio de dias de préstamo de quienes superan el valor promedio es:', prom);
+  end;
 end.
