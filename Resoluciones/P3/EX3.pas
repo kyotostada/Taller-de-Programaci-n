@@ -183,9 +183,8 @@ begin
   if (a <> nil) then begin
   writeln('La cantidad de socios cuyo número es múltiplo de cinco es:', cantMultiplo(a));
   InformarSocios(a);
-  writeln('Ingrese un valor como promedio');
+  writeln('Ingrese un valor como promedio:');
   readln(valor);
-  InformarPromedio(a, valor, prom);
-  writeln('El promedio de dias de préstamo de quienes superan el valor promedio es:', prom);
+  InformarPromedio(a, valor);
   end;
 end.
