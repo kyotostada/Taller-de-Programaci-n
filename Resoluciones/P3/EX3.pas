@@ -130,14 +130,14 @@ var
 begin
   if (a <> nil) then begin
     recorrerLista(a^.elem.lis, aux);
-    writeln('Código de socio:', a^.elem.nroSocio, 'cantidad de libros cuyo préstamo duró siete o menos días es', aux);
+    writeln('Codigo de socio:', a^.elem.nroSocio, 'cantidad de libros cuyo prestamo duro siete o menos dias es', aux);
     InformarSocios(a^.hi);
     InformarSocios(a^.hd);
   end;
 end;
 
 
-procedure InformarPromedio (a: arbol; valor: real; var prom: real);    
+procedure InformarPromedio (a: arbol; valor: real);    
 
   procedure contarSociosPromedio(l: lista; valor: real; var promediosocio: real);
   var
@@ -161,27 +161,23 @@ procedure InformarPromedio (a: arbol; valor: real; var prom: real);
     if (a <> nil) then begin
       contarSociosPromedio(a^.elem.lis, valor, promedioSocio);
       if (promedioSocio > valor) then
-        writeln('Número de socio:', a^.elem.nroSocio, 'promedio de días de prestamo:', promedioSocio);
-      end;
-      cargarPromedio (a^.hi, valor);
-      cargarPromedio (a^.hd, valor);
+        writeln('Numero de socio:', a^.elem.nroSocio, 'promedio de dias de prestamo:', promedioSocio);
+	  cargarPromedio (a^.hi, valor);
+	  cargarPromedio (a^.hd, valor);
+	end;
   end;
 
 begin
 cargarPromedio(a, valor);
 end;
 
-
-// EL PROGRAMA NUNCA TERMINA CUANDO SE INGRESA EL VALOR FIN
-
 var
   a: arbol;
-  prom: real;
-  valor: integer;
+  valor: real;
 begin
   generarArbol(a);
   if (a <> nil) then begin
-  writeln('La cantidad de socios cuyo número es múltiplo de cinco es:', cantMultiplo(a));
+  writeln('La cantidad de socios cuyo numero es multiplo de cinco es:', cantMultiplo(a));
   InformarSocios(a);
   writeln('Ingrese un valor como promedio:');
   readln(valor);
