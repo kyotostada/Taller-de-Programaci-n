@@ -34,11 +34,11 @@ type
   nodoArbol1 = record
     elem: datoArbol1;
     hi: arbol1;
-    hd: arbol2;
+    hd: arbol1;
   end;
 
 
-  datoArbol2 = record;
+  datoArbol2 = record
     nroHistoria: integer;
     costoTotal: real;
   end;
@@ -63,19 +63,17 @@ procedure generarArbol1(var a1: arbol1);
 
     procedure leerConsulta (var c: consulta; var n: integer);
     
-        procedure leerFecha (f: fecha);
-        begin
-            read(f.dia);
-            read(f.mes);
-            read(f.anio);
-        end;
-
     begin
-      read(n);
-      if (n <> fin) then begin
-        read(c.nroConsulta);
+      writeln('Ingrese numero de consulta');
+      read(c.nroConsulta);
+      if (c.nroConsulta <> fin) then begin
+        writeln('Ingrese numero de historia clinica');
+        read(n);
+        writeln('Ingrese fecha');
         leerFecha(c.fec);
+        writeln('Ingrese tipo de consulta');
         read(c.tipo);
+        writeln('Ingrese costo de la consulta');
         read(c.costo);
       end;
     end;
@@ -91,25 +89,36 @@ procedure generarArbol1(var a1: arbol1);
       l:= nue;
     end;
 
-    procedure cargarDatos1(var a1; c: consulta; n: integer);
+    procedure cargarDatos1(var a1: arbol1; c: consulta; n: integer);
     begin
       if (a1 = nil) then begin
         new(a1);
         a1^.elem.nroHistoria:= n;
         agregarAdelante(a1^.elem.consultas, c);
-        a^.hi:= nil;
-        a^.hd:= nil;
-      end;
+        a1^.hi:= nil;
+        a1^.hd:= nil;
+      end
       else
         if (a1^.elem.nroHistoria = n) then
-          agregarAdelante(a1^.elem.consultas, c);
+          agregarAdelante(a1^.elem.consultas, c)
         else
           if (a1^.elem.nroHistoria > n) then
-            cargarDatos1(a^.hd, c, n);
+            cargarDatos1(a1^.hd, c, n)
           else
-            cargarDatos1(a^.hi, c, n);
+            cargarDatos1(a1^.hi, c, n);
     end;
-    
+ var
+  c: consulta;
+  n: integer;
+begin
+  leerConsulta(c,n);
+  while (c.nroConsulta <> fin) do begin
+    cargarDatos1(a1, c, n);
+    leerConsulta(c, n);
+ end;
+end; 
+ 
+ 
 procedure imprimirArbol1(a1: arbol1);
   procedure imprimirHistoria (l: lista);
   begin
@@ -122,61 +131,64 @@ procedure imprimirArbol1(a1: arbol1);
       writeln('Costo  de la consulta: ', l^.elem.costo);
       l:= l^.sig;
     end;
+  end;
 
 begin
   if (a1 <> nil) then begin
-    imprimirArbol1(a1^.hi)
+    imprimirArbol1(a1^.hi);
     imprimirHistoria(a1^.elem.consultas);
     imprimirArbol1(a1^.hd);
   end;
+end;
 
  procedure recorrerLista (l: lista; var aux: integer);
-  var
   begin
     aux:= 0;
     while (l<> nil) do begin
       aux:= aux + 1;
       l:= l^.sig;
     end;
+  end;
 
-
-procedure NumeroMax (a1: arbol1, var maxnro: integer);
+procedure NumeroMax (a1: arbol1; var maxnro: integer);
 var
   aux: integer;
   max: integer;
 begin
-  max:= -1
-  if (a <> nil) then begin
-    recorrerLista(a^.elem.consultas, aux);
+  max:= -1;
+  if (a1 <> nil) then begin
+    recorrerLista(a1^.elem.consultas, aux);
     if (aux > max) then
-      max:= a^.elem.nroHistoria;
+      max:= a1^.elem.nroHistoria
     else
-      NumeroMax:= NumeroMax(a1^.hi) + NumeroMax(a1^.hd);
+      NumeroMax(a1^.hi, maxnro);
+      NumeroMax(a1^.hd, maxnro);
   end;
+end;
 
-function CantConsultas(a1: arbol1; nro: integer);
+function CantConsultas(a1: arbol1; nro: integer): integer;
 var
   aux: integer;
 begin
-  if (a = nil) then CantConsultas:= 0;
+  if (a1 = nil) then CantConsultas:= 0
   else
-    if (a <> nil) then begin
+    if (a1 <> nil) then begin
         if (a1^.elem.nroHistoria = nro) then begin
         recorrerLista(a1^.elem.consultas, aux);
         CantConsultas:= aux;
-        end;
+        end
         else
           if (a1^.elem.nroHistoria < nro) then
-            CantConsultas:= CantConsultas(a1^.hi);
+            CantConsultas:= CantConsultas(a1^.hi, nro)
           else
-            CantConsultas:= CantConsultas(a1^.hd);
+            CantConsultas:= CantConsultas(a1^.hd, nro);
     end;
 end;
 
-procedure CantSuperan (a1: arbol1; var cant:integer; valor: integer)
+
+procedure CantSuperan (a1: arbol1; var cant:integer; valor: real);
 
   procedure ContarSuperan (l: lista; valor: real; var aux: integer);
-  var
   begin
     aux:= 0;
     while (l<> nil) do begin
@@ -184,9 +196,7 @@ procedure CantSuperan (a1: arbol1; var cant:integer; valor: integer)
         aux:= aux + 1;
       l:= l^.sig;
     end;
-
-
-
+  end;
 
 var
   aux: integer;
@@ -197,8 +207,9 @@ begin
     cant:= cant + aux;
     CantSuperan(a1^.hd, aux, valor);
   end;
+end;
 
-function ObtenerCostoEntreDosCodigos2 (a2: arbol2; codigo1, codigo2: integer): real; 
+function ObtenerCostoEntreDosCodigos2 (a1: arbol1; codigo1, codigo2: integer): real; 
   
   function ImporteTotal (l: lista): real;
   var
@@ -213,16 +224,17 @@ function ObtenerCostoEntreDosCodigos2 (a2: arbol2; codigo1, codigo2: integer): r
   end;
 
 begin
-  if (a = nil) then ObtenerCostoEntreDosCodigos2 := 0
-       else
-		if (a^.dato.codigo > codigo1) then 
-		  if (a^.dato.codigo < codigo2) then 
-			 ObtenerCostoEntreDosCodigos2 := ImporteTotal(a2^.elem.consultas); + ObtenerCostoEntreDosCodigos2  (a^.hi, codigo1, codigo2) + ObtenerCostoEntreDosCodigos2  (a^.hd, codigo1, codigo2)
+  if (a1 = nil) then 
+    ObtenerCostoEntreDosCodigos2 := 0
+    else
+		if (a1^.elem.nroHistoria > codigo1) then 
+		  if (a1^.elem.nroHistoria < codigo2) then 
+			 ObtenerCostoEntreDosCodigos2 := ImporteTotal(a1^.elem.consultas) + ObtenerCostoEntreDosCodigos2 (a1^.hi, codigo1, codigo2) + ObtenerCostoEntreDosCodigos2 (a1^.hd, codigo1, codigo2)
 		  else
-			ObtenerCostoEntreDosCodigos2 := ObtenerCostoEntreDosCodigos2  (a^.hi, codigo1, codigo2) + ObtenerCostoEntreDosCodigos2  (a^.hd, codigo1, codigo2)
+			ObtenerCostoEntreDosCodigos2 := ObtenerCostoEntreDosCodigos2  (a1^.hi, codigo1, codigo2) + ObtenerCostoEntreDosCodigos2  (a1^.hd, codigo1, codigo2)
 		else  
-		  ObtenerCostoEntreDosCodigos2 := ObtenerCostoEntreDosCodigos2  (a^.hi, codigo1, codigo2);
-	    end;
+		  ObtenerCostoEntreDosCodigos2 := ObtenerCostoEntreDosCodigos2  (a1^.hi, codigo1, codigo2);
+end;
 
 
 procedure generarArbol2 (var a2: arbol2; a1: arbol1);
@@ -264,50 +276,41 @@ begin
 end;
 
 var
-  c: real;
-begin
-  if (a1 <> nil) then begin
-    generarArbol2(a2^.hi, a1);
-    cargarDatos2(a2^.hi, a1, CostoTotal(c))
-    generarArbol2(a2^.hd, a1);
-  end;
-end;
-var
-  a1: arbol1;
+  ar1: arbol1;
   a2: arbol2;
   nro: integer;
   valor: real;
-  maxnro: integer;
+  maxnumero: integer;
   codigo1, codigo2: integer;
   cantsup: integer;
 begin
-  generarArbol1(a1);
-  imprimirArbol1(a1);
+  generarArbol1(ar1);
+  imprimirArbol1(ar1);
   writeln;
   writeln;
-  writeln('El numero de historia clinica mas grande es:', NumeroMax(a1));
+  NumeroMax(ar1, maxnumero);
+  writeln('El numero de historia clinica mas grande es:', maxnumero);
   writeln;
   writeln;
   writeln('Ingrese un numero de historia clinica');
   readln(nro);
   writeln;
   writeln;
-  CantConsultas(a1, maxnumero);
+  CantConsultas(ar1, maxnumero);
   writeln('La mascota con numero de historia clinica', nro, 'tiene', maxnumero, 'consultas');
   writeln;
   writeln;
   writeln('Ingrese un valor');
   writeln;
   writeln;
-  CantSuperan(a1, valor)
+  read(valor);
+  CantSuperan(ar1, cantsup, valor);
   writeln('La cantidad de consultas que superan los', valor, 'pesos es de:', cantsup);
   writeln;
-  writeln;
-  writeln('El costo total de consultas entre el codigo', codigo1, 'y', codigo2, 'es de:', ObtenerCostoEntreDosCodigos(a1, codigo1,codigo2));
-  generarArbol2(a2, a1);
+  writeln('Ingresar el primer numero');
+  read(codigo1);
+  writeln('Ingresar el segundo numero');
+  read(codigo2);
+  writeln('El costo total de consultas entre el codigo', codigo1, 'y', codigo2, 'es de:', ObtenerCostoEntreDosCodigos2(ar1,codigo1,codigo2));
+  generarArbol2(a2, ar1);
 end.
-
-
-
-
-  
