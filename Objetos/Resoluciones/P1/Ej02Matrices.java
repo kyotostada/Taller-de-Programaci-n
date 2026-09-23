@@ -43,7 +43,9 @@ public class Ej02Matrices {
             for(j= 0; j<5; j++) {
                 VectorSuma[j] = 0;
                 for (i= 0; i<5; i++)
-                    VectorSuma[j]= VectorSuma[j] + Matriz[i][j];
+                    VectorSuma[j]+= + Matriz[i][j];
+			for (i= 0; i<5; i++)
+				System.out.println("Posición: " + i + " , elemento: " + VectorSuma[i]
                 
      
             
@@ -51,15 +53,16 @@ public class Ej02Matrices {
         //Paso 7. lea un valor entero e indique si se encuentra o no en la matriz. 
         //        En caso de encontrarse indique su ubicación (fila y columna)
         //        y en caso contrario imprima "No se encontró el elemento".
-        int valor;
+        int fila = 0, columna= 0, valor;
         valor = Lector.leerInt();
-        for(i = 0; i<5; i++) {
-            for(j = 0; j<5; j++)
-                if (valor == Matriz [i][j]) 
-                    System.out.println("Se encontró el elemento buscado en la fila " + i + " , columna" + j);
-                else
-                    System.out.println("No se encontró el elemento");
-                
+        while (Matriz[fila][columna] != valor) && (fila <5) && (columna < 5) {
+        	fila++;
+			columna++;
+		}	
+		if (valor == Matriz[fila][columna]) 
+            System.out.println("Se encontró el elemento buscado en la fila " + i + " , columna" + j);
+        else
+			System.out.println("No se encontró el elemento ingresado");        
                     
         }
     }
