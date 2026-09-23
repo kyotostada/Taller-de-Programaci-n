@@ -53,8 +53,8 @@ public class EX3 {
             for (j = 0; j<4; j++)
                 if (MatrizTeatro[i][j] > max) {
                     max = MatrizTeatro[i][j];
-                    maxdia = j;
-                    maxfuncion = i;
+                    maxdia = i;
+                    maxfuncion = j;
                 }
         }
         System.out.println();
