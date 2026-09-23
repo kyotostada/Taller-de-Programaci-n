@@ -17,7 +17,7 @@ public class Ej01Jugadores {
         double suma = 0;
         for(i = 1; i<15; i++) {
             VecAlturas[i] = Lector.leerDouble();
-            suma = suma + VecAlturas[i];   
+            suma += VecAlturas[i];   
         }
         
         //Paso 4: Calcular el promedio de alturas e informar
