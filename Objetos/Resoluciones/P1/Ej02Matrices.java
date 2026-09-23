@@ -56,12 +56,12 @@ public class Ej02Matrices {
         //        y en caso contrario imprima "No se encontró el elemento".
         int fila = 0, columna= 0, valor;
         valor = Lector.leerInt();
-        while (Matriz[fila][columna] != valor) && (fila <5) && (columna < 5) {
+        while (Matriz[fila][columna] != valor) && (fila <4) && (columna < 4) {
         	fila++;
 			columna++;
 		}	
 		if (valor == Matriz[fila][columna]) 
-            System.out.println("Se encontró el elemento buscado en la fila " + i + " , columna" + j);
+            System.out.println("Se encontró el elemento buscado en la fila " + (i+1) + " , columna" + (j+1));
         else
 			System.out.println("No se encontró el elemento ingresado");        
                     
