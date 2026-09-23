@@ -19,7 +19,7 @@ public class Ej02Matrices {
         int i, j, Matriz[][] = new int [5][5];
         for(i = 0; i<5; i++) {
             for (j = 0; j<5; j++) 
-                Matriz[i][j] = GeneradorAleatorio.generarInt(31);
+                Matriz[i][j] = GeneradorAleatorio.generarInt(30) + 1;
         }
         
         //Paso 4. mostrar el contenido de la matriz en consola
