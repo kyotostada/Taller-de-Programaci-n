@@ -24,8 +24,8 @@ public class Ej02Matrices {
         
         //Paso 4. mostrar el contenido de la matriz en consola
         System.out.println("Elementos de la matriz: ");
-        for (i = 0; i < 5; i++) {
-            for (j = 0; j < 5; j++) {
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 4; j++) {
                 System.out.print(Matriz[i][j] + " ");
           }
             System.out.println();   
