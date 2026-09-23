@@ -24,8 +24,8 @@ public class Ej02Matrices {
         
         //Paso 4. mostrar el contenido de la matriz en consola
         System.out.println("Elementos de la matriz: ");
-        for (i = 0; i < 4; i++) {
-            for (j = 0; j < 4; j++) {
+        for (i = 0; i < 5; i++) {
+            for (j = 0; j < 5; j++) {
                 System.out.print(Matriz[i][j] + " ");
           }
             System.out.println();   
@@ -56,9 +56,10 @@ public class Ej02Matrices {
         //        y en caso contrario imprima "No se encontró el elemento".
         int fila = 0, columna= 0, valor;
         valor = Lector.leerInt();
-        while (Matriz[fila][columna] != valor) && (fila <4) && (columna < 4) {
-        	fila++;
-			columna++;
+        while (Matriz[fila][columna] != valor) && (fila <5) && {
+			while (Matriz[fila][columna] != valor) && (columna < 5) 
+				columna++;
+			fila++;
 		}	
 		if (valor == Matriz[fila][columna]) 
             System.out.println("Se encontró el elemento buscado en la fila " + (i+1) + " , columna" + (j+1));
