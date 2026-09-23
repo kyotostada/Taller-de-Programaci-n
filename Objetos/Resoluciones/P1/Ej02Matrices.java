@@ -32,9 +32,10 @@ public class Ej02Matrices {
         }
       
         //Paso 5. calcular e informar la suma de los elementos de la fila 1
-        int fila = 1;
+        int suma = 0, fila = 1;
         for (j = 0; j<5; j++)
-            System.out.println("Fila: " + fila + " Elemento: " + Matriz[fila][j]);
+            suma += Matriz[fila][j]
+		System.out.println("La suma de los elementos de la fila: " + fila + " es " + suma);
             
         
         //Paso 6. generar un vector de 5 posiciones donde cada posición j contiene la suma de los elementos de la columna j de la matriz. 
