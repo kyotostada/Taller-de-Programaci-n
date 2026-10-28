@@ -17,6 +17,7 @@ procesos
   
   proceso recorrerCalle(ES papeles: numero)
   comenzar
+    derecha
     repetir 9
       juntarPapel(papeles)
       mover
@@ -38,22 +39,38 @@ areas
 robots
   robot primero
   variables
-    papeles: numero
+    final: boolean
+    ide, papeles: numero
   comenzar
+    RecibirMensaje(ide, coordinador)
     papeles:= 0
     recorrerCalle(papeles)
-    EnviarMensaje(papeles, a2)
+    final:= V
+    si (ide = 1)
+      EnviarMensaje(final, a2)
+      EnviarMensaje(papeles, a2)
+    sino
+      EnviarMensaje(final, b2)
+      EnviarMensaje(papeles, a2)
   fin
 
   robot segundo
   variables
+    inicio: boolean
     ide, papeles: numero
   comenzar
     RecibirMensaje(ide, jefe)
-    RecibirMensaje(papeles, primero)
-    recorrerCalle(papeles)
-    EnviarMensaje(ide, jefe)
-    EnviarMensaje(papeles, jefe)
+    si(ide = 1)
+      RecibirMensaje(inicio, a1)
+      RecibirMensaje(papeles, a1)
+    sino
+      si(ide = 2)
+        RecibirMensaje(inicio, b1)
+        RecibirMensaje(papeles, b1)
+    si(inicio)  
+      recorrerCalle(papeles)
+      EnviarMensaje(ide, jefe)
+      EnviarMensaje(papeles, jefe)
   fin
   robot coordinador
   variables
@@ -68,12 +85,12 @@ robots
       sino
         si(quien = 1)
           RecibirMensaje(segundo, a2)
-      sino
-        si(quien = 2) and (primero < 0)
-          RecibirMensaje(primero, b2)
         sino
-          si(quien = 2)
-            RecibirMensaje(cant2, b2)
+          si(quien = 2) and (primero < 0)
+            RecibirMensaje(primero, b2)
+          sino
+            si(quien = 2)
+              RecibirMensaje(cant2, b2)
     Informar(primero)
   fin
 variables
