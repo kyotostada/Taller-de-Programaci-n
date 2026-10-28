@@ -1,0 +1,67 @@
+programa EX4
+procesos
+  proceso juntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso juntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso limpiarPares(E inicio: numero; E final: numero)
+  comenzar
+    mientras(inicio<=final)
+      Pos(inicio, 1)
+      repetir 99
+        juntarPapeles
+        mover
+      juntarPapeles
+      inicio:= inicio + 1
+  fin
+  proceso limpiarImpares(E inicio: numero; E final: numero)
+  comenzar
+    mientras(inicio<=final)
+      Pos(inicio, 1)
+      repetir 99
+        juntarFlores
+        mover
+      juntarPapeles
+      inicio:= inicio + 1
+  fin
+  proceso limpiarPapeles
+  comenzar
+    limpiarPares(26, 50)
+    limpiarPares(76, 100)
+  fin
+  proceso limpiarFlores
+  comenzar
+    limpiarImpares(1,25)
+    limpiarImpares(51, 75)
+  fin
+areas
+  a1: AreaP(1,1, 25, 100)
+  a2: AreaP(26, 1, 50, 100)
+  a3: AreaP(51, 1, 75, 100)
+  a4: AreaP(76, 1, 100, 100)
+robots
+  robot limpiaPapeles
+  comenzar
+    limpiarPapeles
+  fin
+  robot limpiaFlores
+  comenzar
+    limpiarFlores
+  fin
+variables
+  r1: limpiaFlores
+  r2: limpiaPapeles
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r1, a3)
+  AsignarArea(r2, a2)
+  AsignarArea(r2, a4)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 26, 1)
+fin

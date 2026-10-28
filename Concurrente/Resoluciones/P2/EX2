@@ -1,0 +1,84 @@
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+procesos
+  proceso contarFlor(ES f: numero)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        f:= f + 1
+  fin
+  
+  proceso contarPapel (ES p: numero)
+  comenzar
+    si(HayPapelEnLaEsquina)
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        p:= p + 1
+  fin
+  
+  proceso escalera (ES cant: numero)
+  variables
+    papeles: numero
+    flores: numero
+    alto: numero
+  comenzar
+    Random(alto, 1, 5)
+    repetir 4
+      papeles:= 0
+      flores:= 0
+      repetir alto
+        contarFlor(flores)
+        contarPapel(papeles)
+        mover
+      contarFlor(flores)
+      contarPapel(papeles)
+      derecha
+      mover
+      repetir 3
+        derecha
+      si(flores > papeles)
+        cant:= cant + 1
+  fin
+areas
+  a1: AreaP (2,1,6,21)
+  a2: AreaP(20, 1, 24, 21)
+  a3: AreaP(40, 1, 44, 21)
+  aj: AreaP(1,1,1,1)
+robots
+  robot constructor
+  variables
+    cantsuperan: numero
+  comenzar
+    cantsuperan:= 0
+    escalera(cantsuperan)
+    EnviarMensaje(cantsuperan, jefe)
+  fin
+  robot coordinador
+  variables
+    sumaescalones: numero
+    cantsup: numero
+  comenzar
+    sumaescalones:= 0
+    repetir 3
+      RecibirMensaje(cantsup,*)
+      sumaescalones:= sumaescalones + cantsup
+    Informar(sumaescalones)
+  fin
+variables
+  r1, r2, r3: constructor
+  jefe: coordinador
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(jefe, aj)
+  Iniciar(r1, 2, 1)
+  Iniciar(r2, 20, 1)
+  Iniciar(r3, 40, 1)
+  Iniciar(jefe, 1,1)
+fin

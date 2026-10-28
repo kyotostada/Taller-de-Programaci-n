@@ -1,0 +1,102 @@
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+procesos
+  proceso recogerFlor (ES f: numero)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        f:= f + 1
+  fin
+  proceso recorrerAvenida (ES flores: numero)
+  variables
+    ide, flores: numero
+  comenzar
+    flores:= 0
+    RecibirMensaje(ide, jefe)
+    repetir 9
+      recogerFlor(flores)
+      mover
+    recogerFlor(flores)
+    EnviarMensaje(ide, jefe)
+    EnviarMensaje(flores, jefe)
+  fin
+areas
+  a1: AreaP (1,1,1,10)
+  a2: AreaP (2, 11, 2, 20)
+  a3: AreaP (3, 21, 3, 30)
+  a4: AreaP (4, 31, 4, 40)
+  a5: AreaP (5, 41, 5, 50)
+  a6: AreaP (6, 51, 6, 60)
+  aj: AreaP (2, 1, 2, 1)
+  
+robots
+  robot coordinador
+  variables
+    otro, diferencia, quien, cant, robotMax, max: numero
+  comenzar
+    max:= 0
+    otro:= 0
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+    EnviarMensaje(5, r5)
+    EnviarMensaje(6, r6)
+    
+    repetir 6
+      RecibirMensaje(quien, *)
+      si(quien = 1)
+        RecibirMensaje(cant, r1)
+      sino
+        si(quien = 2)
+          RecibirMensaje(cant, r2)
+        sino
+          si(quien = 3)
+            RecibirMensaje(cant, r3)
+          sino
+            si(quien = 4)
+              RecibirMensaje(cant, r4)
+            sino
+              si(quien = 5)
+                RecibirMensaje(cant, r5)
+              sino
+                RecibirMensaje(cant, r6)
+      si (cant >= max)
+        max:= cant
+    Informar(max)
+  fin
+  robot competidor
+  variables
+    flo: numero
+  comenzar
+    recorrerAvenida(flo)
+  fin
+variables
+  r1: competidor
+  r2: competidor
+  r3: competidor
+  r4: competidor
+  r5: competidor
+  r6: competidor
+  jefe: coordinador
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(r4, a4)
+  AsignarArea(r5, a5)
+  AsignarArea(r6, a6)
+  AsignarArea(jefe, aj)
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 2, 11)
+  Iniciar(r3, 3, 21)
+  Iniciar(r4, 4, 31)
+  Iniciar(r5, 5, 41)
+  Iniciar(r6, 6, 51)
+  Iniciar(jefe, 2, 1)
+fin

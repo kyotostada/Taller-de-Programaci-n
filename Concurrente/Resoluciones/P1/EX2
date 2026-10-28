@@ -1,0 +1,48 @@
+programa EX2
+procesos
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles := papeles + 1
+  fin
+  proceso recorrerAvenida(ES papeles: numero)
+  comenzar
+    repetir 20
+      juntarPapeles(papeles)
+      mover
+  fin
+areas
+  a1: AreaP(10,10,30,30)
+robots
+  robot limpiador
+  variables
+    papeles: numero
+  comenzar
+    papeles := 0
+    si ((PosAv = 10) & (PosCa = 30))
+      derecha
+    si ((PosAv = 30) & (PosCa = 30))
+      repetir 2
+        derecha
+    si ((PosAv = 30) & (PosCa = 10))
+      repetir 3
+        derecha
+    recorrerAvenida(papeles)
+    Informar(papeles)
+  fin
+variables
+  r1: limpiador
+  r2: limpiador
+  r3: limpiador
+  r4: limpiador
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a1)
+  AsignarArea(r3, a1)
+  AsignarArea(r4, a1)
+  Iniciar(r1, 10, 10)
+  Iniciar(r2, 10, 30)
+  Iniciar(r3, 30, 30)
+  Iniciar(r4, 30, 10)
+fin
