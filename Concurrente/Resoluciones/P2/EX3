@@ -17,13 +17,17 @@ procesos
   
   proceso recorrerCalle(ES papeles: numero)
   comenzar
-    RecibirMensaje(ide, jefe)
     repetir 9
       juntarPapel(papeles)
       mover
     juntarPapel(papeles)
   fin
-  
+  proceso EnviarIDs
+  comenzar
+    EnviarMensaje(1, a2)
+    EnviarMensaje(2, b2)
+  fin
+    
 areas
   area1: AreaP (1, 5, 10, 5)
   area2: AreaP (11, 5, 20, 5)
@@ -34,27 +38,57 @@ areas
 robots
   robot primero
   variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    recorrerCalle(papeles)
+    EnviarMensaje(papeles, a2)
+  fin
+
+  robot segundo
+  variables
     ide, papeles: numero
   comenzar
     RecibirMensaje(ide, jefe)
-    papeles:= 0
-    recorrerCalle(papeles)
-    EnviarMensaje(papeles, segundo)
-  fin
-  
-  robot segundo
-  variables
-    papeles: numero
-  comenzar
     RecibirMensaje(papeles, primero)
     recorrerCalle(papeles)
+    EnviarMensaje(ide, jefe)
     EnviarMensaje(papeles, jefe)
   fin
-
+  robot coordinador
+  variables
+    quien, primero, segundo, equipoganador: numero
+  comenzar
+    primero:= -1
+    EnviarIDs
+    repetir 2
+      RecibirMensaje(quien, *)
+      si(quien = 1) & (primero < 0)
+        RecibirMensaje(primero, a2)
+      sino
+        si(quien = 1)
+          RecibirMensaje(segundo, a2)
+      sino
+        si(quien = 2) and (primero < 0)
+          RecibirMensaje(primero, b2)
+        sino
+          si(quien = 2)
+            RecibirMensaje(cant2, b2)
+    Informar(primero)
+  fin
 variables
-  R_info: robot1
-
+  a1, b1: primero
+  a2, b2: segundo
+  jefe: coordinador
 comenzar
-  AsignarArea(R_info, ciudad)
-  Iniciar(R_info, 1,1)
+  AsignarArea(a1, area1)
+  AsignarArea(a2, area2)
+  AsignarArea(b1, area3)
+  AsignarArea(b2, area4)
+  AsignarArea(jefe, aj)
+  Iniciar(a1, 1,5)
+  Iniciar(a2, 11, 5)
+  Iniciar(b1, 1, 7)
+  Iniciar(b2, 11, 7)
+  Iniciar(jefe, 1,1)
 fin
