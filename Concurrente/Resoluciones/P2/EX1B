@@ -4,108 +4,68 @@ proceso que recibe un número de avenida como parámetro,
 se posiciona en esa avenida y la recorre.}
 
 programa ejemplo
-
 procesos
-
-  proceso juntarPapel (ES p: numero)
+  proceso recogerFlor (ES f: numero)
   comenzar
-    si(HayPapelEnLaEsquina)
-      mientras(HayPapelEnLaEsquina)
-        tomarPapel
-        p:= p + 1
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
   fin
-  
-  proceso recorrerCalle(ES papeles: numero)
-  comenzar
-    derecha
-    repetir 9
-      juntarPapel(papeles)
-      mover
-    juntarPapel(papeles)
-  fin
-  proceso EnviarIDs
-  comenzar
-    EnviarMensaje(1, a2)
-    EnviarMensaje(2, b2)
-  fin
-    
-areas
-  area1: AreaP (1, 5, 10, 5)
-  area2: AreaP (11, 5, 20, 5)
-  area3: AreaP (1, 7, 10, 7)
-  area4: AreaP (11, 7, 20, 7)
-  aj: AreaP(1,1,1,1)
-
-robots
-  robot primero
+  proceso recorrerAvenida (ES flores: numero)
   variables
-    final: boolean
-    ide, papeles: numero
+    ide, flores: numero
   comenzar
-    RecibirMensaje(ide, coordinador)
-    papeles:= 0
-    recorrerCalle(papeles)
-    final:= V
-    si (ide = 1)
-      EnviarMensaje(final, a2)
-      EnviarMensaje(papeles, a2)
-    sino
-      EnviarMensaje(final, b2)
-      EnviarMensaje(papeles, a2)
-  fin
-
-  robot segundo
-  variables
-    inicio: boolean
-    ide, papeles: numero
-  comenzar
+    flores:= 0
     RecibirMensaje(ide, jefe)
-    si(ide = 1)
-      RecibirMensaje(inicio, a1)
-      RecibirMensaje(papeles, a1)
-    sino
-      si(ide = 2)
-        RecibirMensaje(inicio, b1)
-        RecibirMensaje(papeles, b1)
-    si(inicio)  
-      recorrerCalle(papeles)
-      EnviarMensaje(ide, jefe)
-      EnviarMensaje(papeles, jefe)
+    repetir 9
+      recogerFlor(flores)
+      mover
+    recogerFlor(flores)
+    EnviarMensaje(ide, jefe)
+    EnviarMensaje(flores, jefe)
   fin
+areas
+  a1: AreaP (1,1,1,10)
+  a2: AreaP (2, 11, 2, 20)
+  aj: AreaP(3, 1, 3, 10)
+robots
   robot coordinador
   variables
-    quien, primero, segundo, equipoganador: numero
+    otro, diferencia, quien, cant, robotMax, max: numero
   comenzar
-    primero:= -1
-    EnviarIDs
+    max:= 0
+    otro: 0
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    
     repetir 2
       RecibirMensaje(quien, *)
-      si(quien = 1) & (primero < 0)
-        RecibirMensaje(primero, a2)
+      si(quien = 1)
+        RecibirMensaje(cant, r1)
       sino
-        si(quien = 1)
-          RecibirMensaje(segundo, a2)
-        sino
-          si(quien = 2) and (primero < 0)
-            RecibirMensaje(primero, b2)
-          sino
-            si(quien = 2)
-              RecibirMensaje(cant2, b2)
-    Informar(primero)
+        RecibirMensaje(cant, r2)
+      si (cant >= max)
+        otro:= max
+        robotMax:= quien
+        max:= cant
+      diferencia:= max - otro
+    Informar(diferencia)
+  fin
+  robot competidor
+  variables
+    flo: numero
+  comenzar
+    recorrerAvenida(flo)
   fin
 variables
-  a1, b1: primero
-  a2, b2: segundo
+  r1: competidor
+  r2: competidor
   jefe: coordinador
 comenzar
-  AsignarArea(a1, area1)
-  AsignarArea(a2, area2)
-  AsignarArea(b1, area3)
-  AsignarArea(b2, area4)
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
   AsignarArea(jefe, aj)
-  Iniciar(a1, 1,5)
-  Iniciar(a2, 11, 5)
-  Iniciar(b1, 1, 7)
-  Iniciar(b2, 11, 7)
-  Iniciar(jefe, 1,1)
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 2, 11)
+  Iniciar(jefe, 3, 1)
 fin
