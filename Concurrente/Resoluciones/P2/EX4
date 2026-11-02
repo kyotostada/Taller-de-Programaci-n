@@ -1,0 +1,126 @@
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+procesos
+  proceso limpiarPapeles(ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  proceso limpiarFlores (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso limpiarEsquina (ES p: numero; ES f: numero)
+  comenzar
+    limpiarPapeles(p)
+    limpiarFlores(f)
+  fin
+  
+  proceso calcularMax (E cant: numero; ES max: numero; ES robotMax: numero; E elegido: numero)
+  comenzar
+    si(cant > max)
+      max:= cant
+      robotMax:= elegido
+  fin
+  proceso EnviarIDs
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+areas
+  cuadrante: AreaC (25, 25, 75, 75)
+  arear1: AreaP(25, 1, 25, 1)
+  arear2: AreaP(30, 1, 30, 1)
+  arear3: AreaP(35, 1, 35, 1)
+  arear4: AreaP(40, 1, 40, 1)
+  aj: AreaP(1,1,1,1)
+robots
+  robot recolector
+  variables
+    ganador, id, total, CaAle, AvAle, CalleInicio, AvenidaInicio, flores, papeles: numero
+    apto: boolean
+  comenzar
+    flores:= 0
+    papeles:= 0
+    CalleInicio:= PosCa
+    AvenidaInicio:= PosAv
+    RecibirMensaje(id, jefe)
+    RecibirMensaje(apto, jefe)
+    mientras (apto)
+      Random(AvAle, 25, 75)
+      Random(CaAle, 25, 75)
+      Pos(AvAle, CaAle)
+      limpiarEsquina(flores, papeles)
+      total:= flores + papeles
+      Pos(AvenidaInicio, CalleInicio)
+      EnviarMensaje(total, jefe)
+      RecibirMensaje(apto, jefe)
+    RecibirMensaje(ganador, jefe)
+    si(ganador = id)
+      Pos(50,50)   
+  fin
+  robot coordinador
+  variables
+    elegido, max, robotMax, totalObj: numero
+    aviso: boolean
+  comenzar
+    max:= -1
+    totalObj:= 0
+    EnviarIDs
+    repetir 10
+      Random(elegido, 1, 4)
+      si (elegido = 1)
+        EnviarMensaje(V, r1)
+        RecibirMensaje(totalObj, r1)
+      sino
+        si(elegido = 2)
+          EnviarMensaje(V, r2)
+          RecibirMensaje(totalObj, r2)
+        sino
+          si(elegido = 3)
+            EnviarMensaje(V, r3)
+            RecibirMensaje(totalObj, r3)
+          sino
+            si(elegido = 4)
+              EnviarMensaje(V, r4)
+              RecibirMensaje(totalObj, r4)
+      calcularMax(totalObj, max, robotMax, elegido)
+    aviso:= F
+    EnviarMensaje(aviso, r1)
+    EnviarMensaje(aviso, r2)
+    EnviarMensaje(aviso, r3)
+    EnviarMensaje(aviso, r4)
+    EnviarMensaje(robotMax, r1)
+    EnviarMensaje(robotMax, r2)
+    EnviarMensaje(robotMax, r3)
+    EnviarMensaje(robotMax, r4)
+  fin
+variables
+  r1, r2, r3, r4: recolector
+  jefe: coordinador
+comenzar
+  AsignarArea(r1, cuadrante)
+  AsignarArea(r2, cuadrante)
+  AsignarArea(r3, cuadrante)
+  AsignarArea(r4, cuadrante)
+  AsignarArea(r1, arear1)
+  AsignarArea(r2, arear2)
+  AsignarArea(r3, arear3)
+  AsignarArea(r4, arear4)
+  AsignarArea(jefe, aj)
+  Iniciar(r1, 25,1)
+  Iniciar(r2, 30, 1)
+  Iniciar(r3, 35, 1)
+  Iniciar(r4, 40, 1)
+  Iniciar(jefe, 1,1)
+fin
