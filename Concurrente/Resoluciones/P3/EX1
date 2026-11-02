@@ -1,0 +1,117 @@
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+procesos
+  proceso juntarPapeles (ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  proceso depositarPapeles (E p: numero)
+  comenzar
+    repetir p
+      depositarPapel
+  fin
+  
+  proceso depositarFlores (E f: numero)
+  comenzar
+    repetir f
+      depositarFlor
+  fin
+  
+  proceso juntarFlores (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso recorrerAvenida(E numAv: numero)
+  comenzar
+    Pos(numAv, 1)
+    repetir 99
+      mover
+  fin
+  
+    
+areas
+  esquina: AreaC(10,10,10,10)
+  af: AreaC (1,1,5,10)
+  ap: AreaC (6, 1, 10, 9)
+  af1: AreaP(6,10,6,10)
+  af2: AreaP (7,10,7,10)
+  ap1: AreaP (8,10,8,10)
+  ap2: AreaP(9,10,9,10)
+robots
+  robot florero
+  variables
+    AvIn, CaIn, av, ca: numero
+    flores: numero
+  comenzar
+    flores:= 0
+    AvIn:= PosAv
+    CaIn:= PosCa
+    repetir 5
+      Random(av,1,5)
+      Random(ca,1,10)
+      BloquearEsquina(av, ca)
+      Pos(av, ca)
+      juntarFlores(flores)
+      Pos(AvIn, CaIn)
+      LiberarEsquina(av, ca)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    depositarFlores(flores)
+    Pos(AvIn, CaIn)
+    LiberarEsquina(10,10)
+  fin
+  robot papelero
+  variables
+    AvIn, CaIn, av, ca: numero
+    papeles: numero
+  comenzar
+    papeles:= 0
+    AvIn:= PosAv
+    CaIn:= PosCa
+    repetir 3
+      Random(av,6,10)
+      Random(ca,1,9)
+      BloquearEsquina(av, ca)
+      Pos(av, ca)
+      juntarPapeles(papeles)
+      Pos(AvIn, CaIn)
+      LiberarEsquina(av, ca)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    depositarPapeles(papeles)
+    Pos(AvIn, CaIn)
+    LiberarEsquina(10,10)
+  fin  
+variables
+  rp1: papelero
+  rp2: papelero
+  rf1: florero
+  rf2: florero
+comenzar
+  AsignarArea(rp1, esquina)
+  AsignarArea(rp2, esquina)
+  AsignarArea(rf1, esquina)
+  AsignarArea(rf2, esquina)
+  AsignarArea(rp1, ap1)
+  AsignarArea(rp1, ap)
+  AsignarArea(rp2, ap2)
+  AsignarArea(rp2, ap)
+  AsignarArea(rf1, af1)
+  AsignarArea(rf1, af)
+  AsignarArea(rf2, af2)
+  AsignarArea(rf2, af)
+  Iniciar(rp1, 8,10)
+  Iniciar(rp2, 9, 10)
+  Iniciar(rf1, 6, 10)
+  Iniciar(rf2, 7, 10)
+fin

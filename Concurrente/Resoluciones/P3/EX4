@@ -1,0 +1,113 @@
+programa EX4
+procesos
+  proceso juntarFlor(ES ok: boolean)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+    sino
+      ok:= F
+  fin
+  proceso EnviarIDs
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+  
+  proceso enviarEsquinas (E colecta: numero; E deposito: numero)
+  comenzar
+    EnviarMensaje(colecta, r1)
+    EnviarMensaje(deposito, r1)
+    EnviarMensaje(colecta, r2)
+    EnviarMensaje(deposito, r2)
+    EnviarMensaje(colecta, r3)
+    EnviarMensaje(deposito, r3)
+    EnviarMensaje(colecta, r4)
+    EnviarMensaje(deposito, r4)
+  fin
+  
+  proceso CalcularMax(E id: numero; ES f: numero; ES max: numero; ES robotMax: numero)
+  comenzar
+    si(f > max)
+      max:= f
+      robotMax:= id
+  fin
+  
+areas
+  esquinaColecta: AreaPC(10,10,10,10)
+  esquinaDeposito: AreaPC(11,11,11,11)
+  a1: AreaP (9,9,9,9)
+  a2: AreaP (9,10,9,10)
+  a3: AreaP (9,11,9,11)
+  a4: AreaP(9,12,9,12)
+  aj: AreaP(1,1,1,1)
+robots
+  robot recolector
+  variables
+    AvIn, CaIn, colecta, deposito: numero
+    id: numero
+    hay: boolean
+  comenzar
+    hay:= V
+    AvIn:= PosAv
+    CaIn:= PosCa
+    RecibirMensaje(id, jefe)
+    RecibirMensaje(colecta, jefe)
+    RecibirMensaje(deposito, jefe)
+    mientras(hay)
+      BloquearEsquina(colecta, colecta)
+      Pos(colecta,colecta)
+      juntarFlor(hay)
+      BloquearEsquina(deposito, deposito)
+      Pos(deposito, deposito)
+      LiberarEsquina(colecta, colecta)
+      si(HayFlorEnLaBolsa) {¿Está bien este if? Porque voy a depositar aunque no tenga}
+        depositarFlor
+      Pos(AvIn, CaIn)
+      LiberarEsquina(deposito, deposito)
+    EnviarMensaje(id, jefe)
+  fin
+  robot coordinador
+  variables
+    av, ca: numero
+    id, max, ultimo: numero
+    colecta, deposito: numero
+  comenzar
+    max:= -1
+    colecta:= 10
+    deposito:= 11    
+    EnviarIDs
+    enviarEsquinas(colecta, deposito)
+    repetir 4
+      RecibirMensaje(id, *)
+      ultimo:= id
+    Informar(ultimo)
+    Pos(deposito, deposito)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+variables
+  r1, r2, r3, r4: recolector
+  jefe: coordinador
+comenzar
+  AsignarArea(r1, esquinaColecta)
+  AsignarArea(r1, esquinaDeposito)
+  AsignarArea(r1, a1)
+  AsignarArea(r2, esquinaColecta)
+  AsignarArea(r2, esquinaDeposito)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, esquinaColecta)
+  AsignarArea(r3, esquinaDeposito)
+  AsignarArea(r3, a3)
+  AsignarArea(r4, esquinaColecta)
+  AsignarArea(r4, esquinaDeposito)
+  AsignarArea(r4, a4)
+  AsignarArea(jefe, aj)
+  AsignarArea(jefe, esquinaDeposito)
+  Iniciar(r1, 9,9)
+  Iniciar(r2,9,10)
+  Iniciar(r3,9,11)
+  Iniciar(r4,9,12)
+  Iniciar(jefe, 1,1)
+fin

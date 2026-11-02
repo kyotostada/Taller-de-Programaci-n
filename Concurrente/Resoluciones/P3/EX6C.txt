@@ -1,0 +1,1 @@
+Para hacer el cuadrante sin saber su tamaño de antemano, debemos pasar esos valores como parámetros desde el robot jefe hacia los robots corredores

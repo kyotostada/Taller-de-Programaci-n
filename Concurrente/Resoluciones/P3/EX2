@@ -1,0 +1,162 @@
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+procesos
+  proceso juntarFlores (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso juntarPapeles (ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  proceso escalera1Flores (ES f: numero)
+  variables
+    dimension: numero
+  comenzar
+    dimension:= 5
+    repetir 4
+      repetir dimension
+        mover
+      juntarFlores(f)
+      derecha
+      repetir dimension
+        mover
+      repetir 3
+        derecha
+      dimension:= dimension - 1
+    mover
+    juntarFlores(f)
+    derecha
+  fin
+  
+  proceso escalera2Flores (ES f: numero)
+  variables
+    dimension: numero
+  comenzar
+    dimension:= 2
+    repetir 4
+      repetir dimension
+        mover
+      juntarFlores(f)
+      derecha
+      repetir dimension
+        mover
+      juntarFlores(f)
+      dimension:= dimension + 1
+      repetir 3
+        derecha    
+  fin
+  
+  proceso escalera1Papeles (ES p: numero)
+  variables
+    dimension: numero
+  comenzar
+    dimension:= 5
+    repetir 4
+      repetir dimension
+        mover
+      juntarPapeles(p)
+      repetir 3
+        derecha
+      repetir dimension
+        mover
+      derecha
+      juntarPapeles(p)
+      dimension:= dimension - 1
+    mover
+    juntarPapeles(p)
+    repetir 3
+      derecha
+  fin
+  
+  proceso escalera2Papeles (ES p: numero)
+  variables
+    dimension: numero
+  comenzar
+    dimension:= 2
+    repetir 4
+      repetir dimension
+        mover
+      juntarPapeles(p)
+      repetir 3
+        derecha
+      repetir dimension
+        mover
+      derecha
+      dimension:= dimension + 1
+  fin
+      
+areas
+  centro: AreaC(16,16,16,16)
+  a1: AreaP(1,1, 15, 31)
+  a2: AreaP(17,1,31,31)
+  aj: AreaP(16,1,16,1)
+robots
+  robot florero
+  variables
+    id, flores: numero
+  comenzar
+    flores:= 0
+    RecibirMensaje(id, jefe)
+    escalera1Flores(flores)
+    BloquearEsquina(16,16)
+    mover
+    EnviarMensaje(id, jefe)
+    repetir 2
+      derecha
+    mover
+    LiberarEsquina(16,16)
+    escalera2Flores(flores)
+    Informar(flores)
+  fin
+  robot papelero
+  variables
+    id, papeles: numero
+  comenzar
+    papeles:= 0
+    RecibirMensaje(id, jefe)
+    escalera1Papeles(papeles)
+    BloquearEsquina(16,16)
+    mover
+    EnviarMensaje(id, jefe) 
+    repetir 2
+      derecha
+    mover
+    LiberarEsquina(16,16)
+    escalera2Papeles(papeles)
+    Informar(papeles)
+  fin
+  robot coordinador
+  variables
+    ganador: numero
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    RecibirMensaje(ganador, *)
+    Informar(ganador)
+    {¿Puedo no recibir el segundo?}
+  fin  
+variables
+  r1: florero
+  r2: papelero
+  jefe: coordinador
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r1, centro)
+  AsignarArea(r2, centro)
+  AsignarArea(r2, a2)
+  AsignarArea(jefe, aj)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 31,1)
+  Iniciar(jefe, 16,1)
+fin
