@@ -23,8 +23,6 @@ procesos
     mientras(HayPapelEnLaEsquina)
       tomarPapel
       cantesquina:= cantesquina+1
-    repetir cantesquina
-      depositarPapel
   fin
   
   proceso depositarPapeles(ES p: numero)
@@ -93,6 +91,7 @@ robots
         depositarPapeles(papeles)
         intentos:= 0
       sino
+        depositarPapeles(papeles)
         Pos(AvOrigen, CaOrigen)
         LiberarEsquina(50,50)
         intentos:= intentos + 1    
