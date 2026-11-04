@@ -1,0 +1,41 @@
+programa EX4
+procesos
+
+areas
+  zonatrabajo: AreaPC(2,2,100,100)
+  a1: AreaP(2,1,2,1)
+  a2: AreaP(3,1,3,1)
+  aj: AreaP(1,1,1,1)
+robots
+  robot robot1
+  comenzar
+    recorrerAvenida(1)
+  fin
+variables
+  r1, r2: trabajador
+  jefe: master
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r1, zonatrabajo)
+  AsignarArea(r2, zonatrabajo)
+  AsignarArea(jefe, aj)
+  Iniciar(jefe, 1,1)
+  Iniciar(r1, 2,1)
+  Iniciar(r2, 3,1)
+fin
+
+{Lo que entendí del ejercicio:
+Para el master:
+Envía ID a los dos trabajadores
+Envía 10 tareas, asignadas aleatoriamente, a los dos trabajadores
+Envía esquina, asignada aleatoriamente, a los dos trabajadores
+Envia orden de terminar pasadas las 10 tareas
+
+Para el slave:
+Recibe su id
+Recibe su tarea
+Recibe la esquina donde debe hacer su tarea
+Esperan a la nueva tarea}
+
+

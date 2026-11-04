@@ -1,0 +1,73 @@
+programa ejemplo
+procesos
+  proceso juntarPapeles(ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  proceso avanzarEtapa (ES p: numero)
+  comenzar
+    repetir 5
+      juntarPapeles(p)
+      si(PosCa < 100)
+        mover
+  fin
+  
+  proceso EnviarAvisos
+  comenzar
+    EnviarMensaje(V, r1)
+    EnviarMensaje(V, r2)
+    EnviarMensaje(V, r3)
+  fin
+  
+  proceso EnviarIDs
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+  fin
+  
+areas
+  a1: AreaP(1,1,1,100)
+  a2: AreaP(2,1,2,100)
+  a3: AreaP(3,1,3,100)
+  aj: AreaP(4,1,4,1)
+robots
+  robot papelero
+  variables
+    id: numero
+    aviso: boolean
+    etapa, flores: numero
+  comenzar
+    flores:= 0
+    RecibirMensaje(id, jefe)
+    repetir 20
+      RecibirMensaje(aviso, jefe)
+      avanzarEtapa(flores)
+      EnviarMensaje(V, jefe)
+  fin        
+  robot coordinador
+  variables
+    finalizado: boolean
+  comenzar
+    EnviarIDs
+    repetir 20
+      EnviarAvisos
+      repetir 3
+        RecibirMensaje(finalizado, *)
+  fin
+variables
+  r1, r2, r3: papelero
+  jefe: coordinador
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(jefe, aj)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,1)
+  Iniciar(r3, 3,1)
+  Iniciar(jefe, 4,1)
+fin

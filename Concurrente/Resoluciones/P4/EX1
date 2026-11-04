@@ -1,0 +1,147 @@
+programa ejemplo
+procesos
+  proceso depositarFloresCliente(E f: numero)
+  comenzar
+    repetir f
+      depositarFlor
+      si(PosCa < 100)
+        mover
+  fin
+  
+  proceso depositarFlores(E f: numero)
+  comenzar
+    repetir f
+      depositarFlor
+  fin
+  
+  proceso EnviarIDs
+  comenzar
+    EnviarMensaje(1, c1)
+    EnviarMensaje(2, c2)
+    EnviarMensaje(3, c3)
+  fin
+  
+  proceso EnviarACK(E id: numero)
+  comenzar
+    si (id = 1)
+      EnviarMensaje(V, c1)
+    sino
+      si (id = 2)
+        EnviarMensaje(V, c2)
+      sino
+        EnviarMensaje(V, c3)
+  fin
+  
+  proceso RecibirEsquina (ES av: numero; ES ca: numero; E id: numero)
+  comenzar
+    si(id=1)
+      RecibirMensaje(av, c1)
+      RecibirMensaje(ca, c1)
+    sino
+      si(id=2)
+        RecibirMensaje(av, c2)
+        RecibirMensaje(ca, c2)
+      sino
+        RecibirMensaje(av, c3)
+        RecibirMensaje(ca, c3)
+  fin
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  
+  proceso identificar(E id: numero; ES flores: numero)
+  comenzar
+    si(id = 1)
+      RecibirMensaje(flores, c1)
+    sino
+      si(id=2)
+        RecibirMensaje(flores, c2)
+      sino
+        RecibirMensaje(flores, c3)
+  fin
+  
+  proceso EnviarCantDeposito
+  variables
+    cant: numero
+  comenzar
+    Random(cant, 1, 4)
+    EnviarMensaje(cant, jefe)
+  fin
+areas
+  a1: AreaPC(1,1,1,100)
+  a2: AreaPC(2,1,2,100)
+  a3: AreaPC(3,1,3,100)
+  aj: AreaP(100,100,100,100)
+  
+robots
+  robot cliente
+  variables
+    id: numero
+    AvServer, CaServer, AvActual, CaActual: numero
+    ACK: boolean
+    flores: numero
+  comenzar
+    RecibirMensaje(id, jefe)
+    mientras(PosCa < 100)
+      flores:= 0
+      AvActual:= PosAv
+      CaActual:= PosCa
+      EnviarMensaje(id, jefe)
+      EnviarCantDeposito
+      EnviarMensaje(AvActual, jefe)
+      EnviarMensaje(CaActual + 1, jefe)
+      RecibirMensaje(ACK, jefe)
+      BloquearEsquina(AvActual, CaActual + 1)
+      mover
+      juntarFlores(flores)
+      Pos(AvActual, CaActual)
+      LiberarEsquina(AvActual, CaActual + 1)
+      depositarFloresCliente(flores)
+    EnviarMensaje(id, jefe)
+    EnviarMensaje(0, jefe)
+  fin
+  robot servidor
+  variables
+    ACK: boolean
+    id: numero
+    cantflores: numero
+    AvCliente, CaCliente: numero
+    termino: numero
+  comenzar
+    termino:= 0
+    EnviarIDs
+    mientras (termino < 3)
+      RecibirMensaje(id, *)
+      identificar(id, cantflores)
+      si(cantflores<>0)
+        RecibirEsquina(AvCliente, CaCliente, id)
+        BloquearEsquina(AvCliente, CaCliente)
+        Pos(AvCliente, CaCliente)
+        depositarFlores(cantflores)
+        Pos(100,100)
+        LiberarEsquina(AvCliente, CaCliente)
+        EnviarACK(id)
+      sino
+        termino:= termino + 1    
+  fin      
+variables
+  c1, c2, c3: cliente
+  jefe: servidor
+comenzar
+  AsignarArea(c1, a1)
+  AsignarArea(c2, a2)
+  AsignarArea(c3, a3)
+  AsignarArea(jefe, aj)
+  AsignarArea(jefe, a1)
+  AsignarArea(jefe, a2)
+  AsignarArea(jefe, a3)
+  Iniciar(c1, 1,1)
+  Iniciar(c2, 2,1)
+  Iniciar(c3, 3,1)
+  Iniciar(jefe, 100,100)
+fin
+
+{En uno de los test, el robot 1 no llego a completar la avenida}

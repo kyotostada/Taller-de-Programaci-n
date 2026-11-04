@@ -1,0 +1,116 @@
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+procesos
+  proceso juntarPapel(ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  proceso juntarPapelConsumidor(E cant: numero; ES p: numero)
+  comenzar
+    repetir cant
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  proceso ContarPapelesEsquina(ES cantesquina: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cantesquina:= cantesquina+1
+    repetir cantesquina
+      depositarPapel
+  fin
+  
+  proceso depositarPapeles(ES p: numero)
+  comenzar
+    repetir p
+      depositarPapel
+  fin
+areas
+  ap1: AreaP(5,1,5,100)
+  ap2: AreaP(10,1,10,100)
+  ac1: AreaP(11,1,11,1)
+  ac2: AreaP(12,1,12,1)
+  esquina: AreaC(50,50,50,50)
+robots
+  robot productor
+  variables
+    papeles: numero
+    AvActual, CaActual: numero
+  comenzar
+    mientras(PosCa < 100)
+      AvActual:= PosAv
+      CaActual:= PosCa
+      papeles:= 0
+      juntarPapel(papeles)
+      mover
+      si(papeles = 5)
+        BloquearEsquina(50,50)
+        Pos(50,50)
+        depositarPapeles(papeles)
+        Pos(AvActual, CaActual)
+        LiberarEsquina(50,50)
+    AvActual:= PosAv
+    CaActual:= PosCa
+    papeles:= 0
+    juntarPapel(papeles)
+    si(papeles = 5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarPapeles(papeles)
+      Pos(AvActual, CaActual)
+      LiberarEsquina(50,50)  
+  fin
+  robot consumidor
+  variables
+    cantrecoger: numero
+    AvOrigen, CaOrigen: numero
+    intentos: numero
+    papeles: numero
+    cantesquina: numero
+  comenzar
+    intentos:= 0
+    papeles:= 0
+    AvOrigen:= PosAv
+    CaOrigen:= PosCa
+    mientras(intentos < 8)
+      papeles:= 0
+      cantesquina:= 0
+      Random(cantrecoger, 2, 5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      ContarPapelesEsquina(cantesquina)
+      si(cantesquina >= cantrecoger)
+        juntarPapelConsumidor(cantrecoger, papeles)
+        Pos(AvOrigen, CaOrigen)
+        LiberarEsquina(50,50)
+        depositarPapeles(papeles)
+        intentos:= 0
+      sino
+        Pos(AvOrigen, CaOrigen)
+        LiberarEsquina(50,50)
+        intentos:= intentos + 1    
+  fin
+variables
+  p1, p2: productor
+  c1, c2: consumidor
+comenzar
+  AsignarArea(p1, ap1)
+  AsignarArea(p1, esquina)
+  AsignarArea(p2, ap2)
+  AsignarArea(p2, esquina)
+  AsignarArea(c1, ac1)
+  AsignarArea(c1, esquina)
+  AsignarArea(c2, ac2)
+  AsignarArea(c2, esquina)
+  Iniciar(p1, 5,1)
+  Iniciar(p2, 10,1)
+  Iniciar(c1, 11,1)
+  Iniciar(c2, 12,1)
+fin
