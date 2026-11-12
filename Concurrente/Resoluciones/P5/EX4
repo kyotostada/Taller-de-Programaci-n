@@ -1,0 +1,111 @@
+programa EX4
+procesos
+  proceso juntarFlores (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso depositarFlores (E f: numero)
+  variables
+    Av, Ca: numero
+  comenzar
+    Av:= PosAv
+    Ca:= PosCa
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    repetir f
+      depositarFlor
+    Pos(Av,Ca)
+    LiberarEsquina(10,10)
+  fin
+  
+  proceso enviarEsquina
+  variables
+    Av, Ca: numero
+    empleado: numero
+  comenzar
+    Random(empleado, 1, 3)
+    Random(Av, 40, 60)
+    Random(Ca, 40, 60)
+    si (empleado = 1)
+      EnviarMensaje(Av, r1)
+      EnviarMensaje(Ca, r1)
+    sino
+      si (empleado = 2)
+        EnviarMensaje (Av, r2)
+        EnviarMensaje (Ca, r2)
+      sino
+        EnviarMensaje(Av, r3)
+        EnviarMensaje(Ca, r3)
+  fin
+areas
+  a1: AreaP (1,1,1,1)
+  a2: AreaP (2,1,2,1)
+  a3: AreaP (3,1,3,1)
+  aj: AreaP (4,1,4,1)
+  deposito: AreaPC (10,10,10,10)
+  cuadrante: AreaPC (40, 40, 60, 60)
+robots
+  robot florero
+  variables
+    AvJefe, CaJefe: numero
+    AvActual, CaActual: numero
+    flores: numero
+  comenzar
+    flores:= 0
+    AvActual:= PosAv
+    CaActual:= PosCa
+    RecibirMensaje(AvJefe, jefe)
+    mientras(AvJefe <> 0)
+      RecibirMensaje(CaJefe, jefe)
+      BloquearEsquina(AvJefe, CaJefe)
+      Pos(AvJefe, CaJefe)
+      juntarFlores(flores)
+      Pos(AvActual, CaActual)
+      LiberarEsquina(AvJefe, CaJefe)
+      EnviarMensaje(V, jefe)
+      RecibirMensaje(AvJefe, jefe)
+    depositarFlores(flores)
+    EnviarMensaje(flores, jefe)  
+  fin
+  
+  robot fiscalizador
+  variables
+    totalF, flores: numero
+    final: boolean
+  comenzar
+    totalF:= 0
+    flores:= 0
+    repetir 8
+      enviarEsquina
+    repetir 8
+      RecibirMensaje(final, *)
+    EnviarMensaje(0, r1)
+    EnviarMensaje(0, r2)
+    EnviarMensaje(0, r3)
+    repetir 3
+      RecibirMensaje(flores, *)
+      totalF:= totalF + flores
+    Informar('Total de flores', totalF)
+  fin
+variables
+  r1, r2, r3: florero
+  jefe: fiscalizador
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(jefe, aj)
+  AsignarArea(r1, deposito)
+  AsignarArea(r2, deposito)
+  AsignarArea(r3, deposito)
+  AsignarArea(r1, cuadrante)
+  AsignarArea(r2, cuadrante)
+  AsignarArea(r3, cuadrante)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2, 1)
+  Iniciar(r3, 3, 1)
+  Iniciar(jefe, 4, 1)
+fin
