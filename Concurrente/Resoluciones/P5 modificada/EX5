@@ -1,0 +1,97 @@
+programa EX5
+procesos
+  
+  proceso juntarPapeles (E cant: numero)
+  variables
+    Av, Ca: numero
+  comenzar
+    Av:= PosAv
+    Ca:= PosCa
+    repetir cant
+      BloquearEsquina(100,1)
+      Pos(100,1)
+      tomarPapel
+      Pos(Av, Ca)
+      LiberarEsquina(100,1)
+      depositarPapel
+  fin
+  
+  proceso EnviarIDs
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+  fin
+  
+  proceso depositar (E id: numero)
+  variables
+    Av, Ca: numero  
+    cantpapeles: numero
+  comenzar
+    Random(cantpapeles, 1, 5)
+    Av:= PosAv
+    Ca:= PosCa
+    BloquearEsquina(100,1)
+    Pos(100,1)
+    repetir cantpapeles
+      depositarPapel
+    Pos(Av, Ca)
+    LiberarEsquina(100,1)
+    EnviarCantidad(id, cantpapeles)
+  fin    
+  proceso EnviarCantidad (E id: numero; E cantpapeles: numero)
+  comenzar
+    si(id = 1)
+      EnviarMensaje(cantpapeles, r1)
+    sino
+      si(id = 2)
+        EnviarMensaje(cantpapeles, r2)
+      sino
+        EnviarMensaje(cantpapeles, r3)
+  fin        
+areas
+  esquina: AreaC (100, 1, 100, 1)
+  a1: AreaP (10, 1, 10 ,1)
+  a2: AreaP (11, 1, 11, 1)
+  a3: AreaP (12, 1, 12, 1)
+  as: AreaP (13, 1, 13, 1)
+robots
+  robot recolector
+  variables
+    id: numero
+    cantpapeles: numero
+  comenzar
+    RecibirMensaje(id, s)
+    repetir 4
+      EnviarMensaje(id, s)
+      RecibirMensaje(cantpapeles, s)
+      juntarPapeles(cantpapeles)
+  fin
+  
+  robot servidor
+  variables
+    id: numero
+    cantpapeles: numero
+  comenzar
+    EnviarIDs
+    repetir 12
+      RecibirMensaje(id, *)
+      depositar(id)
+  fin     
+variables
+  r1, r2, r3: recolector
+  s: servidor
+comenzar
+  AsignarArea(r1, esquina)
+  AsignarArea(r2, esquina)
+  AsignarArea(r3, esquina)
+  AsignarArea(s, esquina)
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(s, as)
+  Iniciar(r1, 10,1)
+  Iniciar(r2, 11,1)
+  Iniciar(r3, 12,1)
+  Iniciar(s, 13,1)
+fin

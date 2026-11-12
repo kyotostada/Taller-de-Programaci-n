@@ -1,0 +1,148 @@
+programa EX1
+procesos
+  proceso juntarFlores(ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso juntarPapeles(ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+ 
+  proceso EnviarIDs
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, a1)
+    EnviarMensaje(4, a2)
+  fin
+  
+  proceso moverBloqueandoF (E id: numero; ES f: numero)
+  comenzar
+    BloquearEsquina(PosAv, PosCa + 1) {Bloqueo Ca98}
+    mover {Estoy en Ca 98}
+    juntarFlores(f)
+    BloquearEsquina(PosAv, PosCa + 1) {Bloqueo Ca 99}
+    mover {Estoy en Ca 99}
+    LiberarEsquina(PosAv, PosCa - 1) {Libero Ca 98} 
+    juntarFlores(f)
+    mover {Estoy en Ca 100}
+    LiberarEsquina(PosAv, PosCa - 1) {Libero Ca 99} 
+  fin 
+  proceso moverBloqueandoP (E id: numero; ES p: numero)
+  comenzar
+    BloquearEsquina(PosAv + 1, PosCa) {Bloqueo Av 2} 
+    mover {Estoy en Av 2}
+    juntarPapeles(p)
+    BloquearEsquina(PosAv + 1, PosCa) {Bloqueo Av 3} 
+    mover {Estoy en Av 3}
+    LiberarEsquina(PosAv - 1, PosCa) {Libero Av 2}
+    juntarPapeles(p)
+    mover {Estoy en Ca 4}
+    LiberarEsquina(PosAv - 1, PosCa) {Libero Ca 3}              
+  fin            
+areas
+  ar1a: AreaP (2, 1, 2, 97)
+  ar1b: AreaP(2,100, 2,100)
+  zonaC: AreaPC (2, 98, 3, 99)
+  ar2a: AreaP (3, 1, 3, 97)
+  ar2b: AreaP (3, 100, 3, 100)
+  aa1a: AreaP (1, 98, 1, 98)
+  aa1b: AreaP (4, 98, 100, 98)
+  aa2a: AreaP (1,99,1,99)
+  aa2b: AreaP(4, 99, 100, 99)
+  aj: AreaP (1,1,1,1)
+robots
+  robot florero
+  variables
+    id, flores: numero
+  comenzar
+    flores:= 0
+    RecibirMensaje(id, jefe)
+    repetir 96
+      juntarFlores(flores)
+      mover
+      juntarFlores(flores)
+    moverBloqueandoF(id, flores)
+    EnviarMensaje(id, jefe)
+    EnviarMensaje(flores, jefe)
+  fin
+  
+  robot papelero
+  variables
+    id, papeles: numero
+  comenzar
+    papeles:= 0
+    derecha
+    RecibirMensaje(id, jefe)
+    moverBloqueandoP(id, papeles)
+    repetir 96  
+      juntarPapeles(papeles)
+      mover
+    juntarPapeles(papeles)
+    EnviarMensaje(id, jefe)
+    EnviarMensaje(papeles, jefe)
+  fin
+  robot coordinador
+  variables
+    totalP, totalF: numero
+    actualP, actualF: numero
+    id: numero
+  comenzar
+    totalP:= 0
+    totalF:= 0
+    EnviarIDs
+    repetir 4
+      RecibirMensaje(id, *)
+      si (id = 1) {Se puede modularizar la parte de recibir}
+        RecibirMensaje(actualF, r1)
+        totalF:= totalF + actualF
+      sino
+        si (id = 2)
+          RecibirMensaje(actualF, r2)
+          totalF:= totalF + actualF
+        sino
+          si(id = 3)
+            RecibirMensaje(actualP, a1)
+            totalP:= totalP + actualP
+          sino
+            RecibirMensaje(actualP, a2)
+            totalP:= totalP + actualP
+    si (totalF > totalP)
+      Informar('Ganó el equipo', 1)
+    sino
+      Informar('Ganó el equipo', 2)
+  fin
+variables
+  r1, r2: florero
+  a1, a2: papelero
+  jefe: coordinador
+comenzar
+  AsignarArea(r1, ar1a)
+  AsignarArea(r1, ar1b)
+  AsignarArea(r2, ar2a)
+  AsignarArea(r2, ar2b)
+  AsignarArea(a1, aa1a)
+  AsignarArea(a1, aa1b)
+  AsignarArea(a2, aa2a)
+  AsignarArea(a2, aa2b)
+  AsignarArea(jefe, aj)
+  AsignarArea(r1, zonaC)
+  AsignarArea(r2, zonaC)
+  AsignarArea(a1, zonaC)
+  AsignarArea(a2, zonaC)
+  Iniciar(r1, 2,1)
+  Iniciar(r2, 3, 1)
+  Iniciar(a1, 1, 98)
+  Iniciar(a2, 1, 99)
+  Iniciar(jefe, 1,1)
+fin
+{Hay veces que el programa da error}
+{¿Cómo marco las esquinas que se comparten?
+ RTA: Creo una zona PC, y separo la zona de cada equipo en dos}
+{El cruce se da en la esquina (2,98), (2,99), (3, 98) y (3, 99)}

@@ -1,0 +1,54 @@
+programa EX2
+procesos
+  proceso vaciarEsquina (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  
+  proceso depositarFlores (E f: numero)
+  comenzar
+    repetir f
+      depositarFlor
+  fin
+  
+  proceso avanzarEtapa (E f: numero)
+  variables
+    Av, Ca: numero
+  comenzar
+    Av:= PosAv
+    Ca:= PosCa
+    repetir 9
+      vaciarEsquina (f)
+      mover
+    BloquearEsquina(50, 50)
+    Pos(50,50)
+    depositarFlores(f)
+    Pos(Av, Ca)
+    LiberarEsquina(50,50)
+    
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot recolector
+  variables
+    flores: numero
+    id: numero
+  comenzar
+    RecibirMensaje(id, jefe)
+    flores:= 0
+    mientras(PosAv < 100)
+      avanzarEtapa(f)
+    barrera(id)
+    
+  fin
+variables
+  r1, r2, r3: recolector
+  jefe: coordinador
+comenzar
+  AsignarArea(R_info, ciudad)
+  Iniciar(R_info, 1,1)
+fin
