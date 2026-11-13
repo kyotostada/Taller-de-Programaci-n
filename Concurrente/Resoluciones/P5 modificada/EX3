@@ -25,7 +25,7 @@ procesos
       si(flores < 10)
         si(PosAv< 100)
           mover
-          movimientos:= 1
+          movimientos:= movimientos + 1
       si(PosAv = 100)
         si (flores < 10)
           juntarFlores(flores)
