@@ -50,19 +50,15 @@ procesos
     si (id = 1)
       EnviarMensaje(V, r2)
       EnviarMensaje(V, r3)
-      RecibirMensaje(aviso, r2)
-      RecibirMensaje(aviso, r3)
     sino
       si (id = 2)
         EnviarMensaje (V, r1)
         EnviarMensaje(V, r3)
-        RecibirMensaje(aviso, r1)
-        RecibirMensaje(aviso, r3)
       sino
         EnviarMensaje(V, r1)
         EnviarMensaje(V, r2)
-        RecibirMensaje(aviso, r1)
-        RecibirMensaje(aviso, r2)
+    repetir 2
+      RecibirMensaje(aviso, *)
   fin
   
 areas
